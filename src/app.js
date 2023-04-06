@@ -3,7 +3,9 @@ const cors = require("cors");
 const morgan = require("morgan");
 const initModels = require("./models/initModels");
 const db = require("./utils/database");
+const cancelOrdersJob = require("./utils/job");
 initModels();
+cancelOrdersJob();
 
 const app = express()
 
