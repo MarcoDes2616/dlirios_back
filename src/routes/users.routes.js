@@ -2,14 +2,14 @@ const { Router } = require("express");
 const Users = require("../models/users.models");
 const rolAuth = require("../middlewares/rol.middleware");
 const authenticate = require("../middlewares/auth.middleware");
-// const { createUserValidator, updateUserValidator } = require("../validators/user.validator");
-// const { createUser, updateUser } = require("../controllers/user.controllers");
-// const multerUpload = require("../middlewares/upload.middleware")
+const { createUserValidator, updateUserValidator } = require("../validators/user.validator");
+const { createUser, updateUser } = require("../controllers/user.controllers");
+const multerUpload = require("../middlewares/upload.middleware")
 
 const router = Router();
 
 router.post("/api/v1/users", 
-    // createUserValidator, 
+    createUserValidator, 
     createUser);
 
 router.put("/api/v1/users/:id", 

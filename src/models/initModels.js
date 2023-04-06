@@ -5,7 +5,9 @@ const ProductInCart = require("./productInCart.models");
 const Order = require("./order.models");
 const Cart = require("./cart.models");
 const UserData = require("./userData.models")
-const Categories = require("./category.models")
+const Categories = require("./category.models");
+const OrderDeads = require("./ordersDead");
+const PioDead = require("./pioDead");
 
 const initModels = () => {
 
@@ -38,8 +40,12 @@ const initModels = () => {
   ProductInCart.belongsTo(Cart, { foreignKey: "cart_id" });
 
   //Order 1 ------ * products_in_order
-  Order.hasMany(ProductInOrder, { foreignKey: "order_id" });
+  Order.hasMany(ProductInOrder, { foreignKey: "order_id", onDelete: 'cascade'});
   ProductInOrder.belongsTo(Order, { foreignKey: "order_id" });
+
+  //Order 1 ------ * products_in_order
+  OrderDeads.hasMany(PioDead, { foreignKey: "order_id" });
+  PioDead.belongsTo(OrderDeads, { foreignKey: "order_id" });
 
 };
 

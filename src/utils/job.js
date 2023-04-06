@@ -10,7 +10,7 @@ const ORDER_PAYMENT_DURATION = process.env.ORDER_PAYMENT_DURATION || '2 hours';
 const ORDER_PAYMENT_WARNING = process.env.ORDER_PAYMENT_WARNING || '1 hours';
 
 function cancelOrdersJob() {
-cron.schedule('0 * * * *', () => {
+  cron.schedule('0 * * * *', () => {
     // Aquí debe obtener todas las órdenes que están en estado "pendiente de pago" y que no han sido completadas.
     const orders = Order.findAll({
       include: {
@@ -20,7 +20,7 @@ cron.schedule('0 * * * *', () => {
         }
       }
     })
-  
+
     // Verifique cada orden pendiente de pago
     orders.filter(order => !order.is_completed).forEach(order => {
       // Calcule la fecha límite para el pago
@@ -30,9 +30,9 @@ cron.schedule('0 * * * *', () => {
       const exist = Warning.findByPk(order.id)
 
       if (now > warningline && !exist) {
-        const warn = async() => {
+        const warn = async () => {
           try {
-            await Warning.create({order_id: order.id})
+            await Warning.create({ order_id: order.id })
             const user = await Users.findByPk(order.user_id)
             if (user) {
               await transporter.sendMail({
@@ -60,9 +60,9 @@ cron.schedule('0 * * * *', () => {
       }
 
       if (now > deadline) {
-        const orderCancel = async() => {
+        const orderCancel = async () => {
           try {
-            await OrderDeads.create({order_id: order.id, total: order.total})
+            await OrderDeads.create({ order_id: order.id, total: order.total })
             order.product_in_orders.forEach(async (product) => {
               await PioDead.create(product)
               const user = await Users.findByPk(order.user_id)
@@ -84,12 +84,12 @@ cron.schedule('0 * * * *', () => {
                     `,
                 });
               }
-            await Order.destroy({where: {id: order.id}})
-          })
-        } catch (error) {
+              await Order.destroy({ where: { id: order.id } })
+            })
+          } catch (error) {
             console.log(error);
           }
-        } 
+        }
       }
     }); // cierre filter
   }); //cierre de cron
