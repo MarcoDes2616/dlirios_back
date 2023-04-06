@@ -22,10 +22,6 @@ const Products = db.define('products', {
   },
   stock: {
     type: DataTypes.INTEGER,
-    defaultValue: 1
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
     allowNull: false
   },
   product_image: {
@@ -39,8 +35,7 @@ const Products = db.define('products', {
   },
 },
 {
-  timestamps: true,
-  createdAt: false 
+  timestamps: false,
 }
 );
 
