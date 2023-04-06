@@ -26,7 +26,15 @@ const Users = db.define('users', {
   data_completed: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
-  }
+  },
+  enable: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  is_admin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
 },
 {
     hooks: {
