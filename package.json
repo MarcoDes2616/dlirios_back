@@ -9,7 +9,7 @@
     "dev": "nodemon ./src/app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Marco Cardenas",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
