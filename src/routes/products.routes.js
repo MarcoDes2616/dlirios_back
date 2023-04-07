@@ -11,10 +11,10 @@ router.get("/api/v1/products",
     getAllProducts
     );
 
-router.post("/api/v1/products", 
+router.post("/api/v1/products/:id", 
     // createProductValidator, 
-    authenticate,
-    rolAuth, 
+    // authenticate,
+    // rolAuth, 
     // multerUpload.single('file'),
     createProduct);
 

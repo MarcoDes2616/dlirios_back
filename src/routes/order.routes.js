@@ -5,7 +5,9 @@ const rolAuth = require("../middlewares/rol.middleware");
 
 const router = Router();
 
-router.post("/api/v1/order/:user", authenticate, createOrder)
+router.post("/api/v1/order/:user", 
+    authenticate, 
+    createOrder)
 
 router.get("/api/v1/order", authenticate, getOrder)
 

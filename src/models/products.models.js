@@ -30,7 +30,7 @@ const Products = db.define('products', {
   },
   product_image: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
     unique: true
   },
   category_id: {

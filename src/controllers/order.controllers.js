@@ -24,14 +24,14 @@ const createOrder = async (req, res, next) => {
     }
 
     try {
-        const data = await Users.findByPk(id)
-        const {data_completed} = data
-        if (!data_completed) {
-            return next({
-                status: 401,
-                message: "the user must complete their information"
-            });
-        }
+        // const data = await Users.findByPk(id)
+        // const {data_completed} = data
+        // if (!data_completed) {
+        //     return next({
+        //         status: 401,
+        //         message: "the user must complete their information"
+        //     });
+        // }
         const result = await CartServices.getCartByUser(user)
 
         let products = result?.product_in_carts;
