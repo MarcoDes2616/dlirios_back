@@ -8,6 +8,7 @@ const { transporter } = require('./mailer');
 const Users = require('../models/users.models');
 const ORDER_PAYMENT_DURATION = process.env.ORDER_PAYMENT_DURATION || '2 hours';
 const ORDER_PAYMENT_WARNING = process.env.ORDER_PAYMENT_WARNING || '1 hours';
+require("dotenv").config();
 
 function cancelOrdersJob() {
   cron.schedule('0 * * * *', () => {

@@ -5,9 +5,9 @@ class UsersServices {
   static async create(newUser) {
     try {
       console.log("llegue aqui");
-      const userCreated = await Users.create(newUser);
-      return userCreated;
+      return await Users.create(newUser);
     } catch (error) {
+      console.log(" y luego llegue aqui");
       throw error;
     }
   }

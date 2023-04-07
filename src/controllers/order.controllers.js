@@ -3,6 +3,7 @@ const OrderServices = require("../services/order.services");
 const ProductsServices = require("../services/products.services");
 const transporter = require("../utils/mailer")
 const Users = require("../models/users.models");
+require("dotenv").config();
 
 const createOrder = async (req, res, next) => {
     //necesito verificar la autenticacion.. token y user por params

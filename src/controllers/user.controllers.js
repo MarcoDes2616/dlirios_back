@@ -1,6 +1,7 @@
 const AuthServices = require("../services/auth.services");
 const UsersServices = require("../services/user.services");
 const transporter = require("../utils/mailer")
+require("dotenv").config();
 
 const createUser = async (req, res, next) => {
   try {
