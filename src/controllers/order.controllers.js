@@ -3,6 +3,7 @@ const OrderServices = require("../services/order.services");
 const ProductsServices = require("../services/products.services");
 const transporter = require("../utils/mailer")
 const Users = require("../models/users.models");
+const { mailOrder } = require("../utils/mail");
 require("dotenv").config();
 
 const createOrder = async (req, res, next) => {
@@ -87,12 +88,7 @@ const createOrder = async (req, res, next) => {
                 from: process.env.MAILER_CONFIG_USER,
                 to: email,
                 subject: "Confirmacion de Orden en Insumos Dlirios",
-                html: `
-                    <p>Hola ${username} Insumos Dlirios ha registrado una compra, proceda con el pago prontamente para realizar el despacho oportuno y disfrutes de nuestros productos increibles.</p>
-                    <p>Cantidad de Artículos: ${productsToOrder.length}</p>,
-                    <p>Monto: ${totalTemp.toFixed(2)}</p>
-                    <a href="paypal.com">Proceder con el pago</a>
-                    `
+                html: mailOrder(username, productsToOrder, totalTemp)
             });
 
 

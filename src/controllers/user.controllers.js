@@ -1,6 +1,8 @@
 const UsersServices = require("../services/user.services");
+const mailWelcome = require("../utils/mail");
 const transporter = require("../utils/mailer")
 require("dotenv").config();
+
 
 const createUser = async (req, res, next) => {
   try {
@@ -12,9 +14,7 @@ const createUser = async (req, res, next) => {
         from: process.env.MAILER_CONFIG_USER,
         to: user.email,
         subject: "Bienvenido a Insumos Dlirios",
-        html: `
-          <p>Hola ${user.username} Bienvenido al MarketPlace.com, donde podras vender y comprar sin comisiones</p>
-          <p>Es hora de que comiences a cargar tus productos y ver lo facil que es</p>`,
+        html: mailWelcome(user),
       });
     }
 
