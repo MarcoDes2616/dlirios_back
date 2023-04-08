@@ -39,7 +39,6 @@ function cancelOrdersJob() {
         })
 
         if (now > warningline && !exist) {
-          console.log("llegue a warn");
           warn(order)
         }
         
