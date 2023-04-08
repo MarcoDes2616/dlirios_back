@@ -17,18 +17,29 @@ router.put("/api/v1/users/:id",
     updateUser);
 
 //activar/desactivar un usuario
-router.put("/api/v1/user/:id", authenticate, rolAuth, async (req, res) => {
+router.put("/api/v1/user/:id", authenticate, rolAuth, async (req, res, next) => {
     try {
         const {id} = req.params
-        const user = Users.findByPk(id)
+        const {id: admin} = req.user
+        if (id == admin) {
+            return next({
+                status: 401,
+                errorName: "Unauthorized",
+                message: "User Unauthorized",
+              });
+        }
+
+        const user = await Users.findByPk(id)
+
         if (user) {
             const {enable} = user
             await Users.update({enable: !enable}, {where: {id}} )
-        }
+        
         res.json({
             success: true,
-            isActive: !enable
+            enable: !enable
         })
+    }
     } catch (error) {
         res.send(error);
     }

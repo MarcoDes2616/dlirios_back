@@ -7,6 +7,7 @@ const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const productsRoutes = require("./routes/products.routes");
 const initModels = require("./models/initModels");
+const errorHandlerRouter = require("./routes/errorHandler.routes");
 const db = require("./utils/database");
 const path = require('path');
 const cancelOrdersJob = require("./utils/job");
@@ -28,7 +29,7 @@ db.authenticate()
   })
   .catch((error) => console.log(error));
 
-db.sync({ alter: true })
+db.sync({ alter: false })
   .then(() => console.log("Base de datos sync"))
   .catch((error) => console.log(error));
 
@@ -48,6 +49,8 @@ app.get('/app/uploads/:filename', (req, res) => {
   const imagePath = path.join(__dirname, '../uploads', filename);
   res.sendFile(imagePath);
 });
+
+errorHandlerRouter(app);
 
 app.listen(PORT, () => {
   console.log(`escuchando en el puerto ${PORT}`);
