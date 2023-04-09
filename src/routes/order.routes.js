@@ -9,8 +9,6 @@ router.post("/api/v1/order/:user",
     authenticate, 
     createOrder)
 
-router.get("/api/v1/order", authenticate, getOrder)
-
-router.get("/api/v1/order/all", authenticate, rolAuth, getAllOrders)
+router.get("/api/v1/order", getOrder)
 
 module.exports = router;

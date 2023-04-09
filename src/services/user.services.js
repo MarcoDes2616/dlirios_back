@@ -11,8 +11,9 @@ class UsersServices {
     }
   }
 
-  static async update(data) {
+  static async update(data, id) {
     try {
+      await Users.update({data_completed: true}, {where: {id}})
       return await UserData.create(data);
 
     } catch (error) {

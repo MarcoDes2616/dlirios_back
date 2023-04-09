@@ -26,7 +26,8 @@ const Products = db.define('products', {
   },
   product_image: {
     type: DataTypes.TEXT,
-    unique: true
+    unique: true,
+    allowNull: false
   },
   category_id: {
     type: DataTypes.INTEGER,

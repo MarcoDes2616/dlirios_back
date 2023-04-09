@@ -13,7 +13,7 @@ const createOrder = async (req, res, next) => {
     //creo la orden en tabla orden
     //crear listado de productos por order
 
-    const { id, email, username } = req.user;
+    const { id } = req.user;
     const { user } = req.params;
 
     if (id != user) {
@@ -26,7 +26,7 @@ const createOrder = async (req, res, next) => {
 
     try {
         const data = await Users.findByPk(id)
-        const {data_completed} = data
+        const {data_completed, username, email} = data
         if (!data_completed) {
             return next({
                 status: 401,
@@ -80,20 +80,20 @@ const createOrder = async (req, res, next) => {
             })
 
             await CartServices.deleteCart(user)
-            res.status(201).json({
-                success: true,
-            });
 
+            
             await transporter.sendMail({
                 from: process.env.MAILER_CONFIG_USER,
                 to: email,
                 subject: "Confirmacion de Orden en Insumos Dlirios",
                 html: mailOrder(username, productsToOrder, totalTemp)
             });
-
+            
+            res.status(201).json({
+                success: true,
+            });
 
         }, 500)
-
 
     } catch (error) {
         next(error)
@@ -101,7 +101,7 @@ const createOrder = async (req, res, next) => {
 }
 
 const getOrder = async (req, res, next) => {
-    const { id: user_id } = req.user;
+    const { user_id } = req.query;
     try {
         const result = await OrderServices.getOrderByUser(user_id)
         res.json(result)

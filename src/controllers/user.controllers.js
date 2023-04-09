@@ -43,9 +43,19 @@ const createData = async (req, res, next) => {
         errorName: "user not logged in",
       });
     }
+    const {data_completed} = await UsersServices.getUser(email)
+    if (data_completed) {
+      console.log("entre");
+      return next({
+        status: 409,
+        message: "Data is completed",
+        errorName: "user not logged in",
+      });
+    }
+    
     const {address, phone} = req.body
     const data = {user_id, address, phone, avatar: req.file?.path}
-    const result = await UsersServices.update(data);
+    const result = await UsersServices.update(data, id);
     res.status(201).json({id: user_id, username, email, avatar: result.avatar});
   } catch (error) {
     next(error)

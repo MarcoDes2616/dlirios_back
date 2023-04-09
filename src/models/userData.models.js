@@ -24,7 +24,8 @@ const UserData = db.define('user_datas', {
   },
   avatar: {
     type: DataTypes.TEXT,
-    unique: true
+    unique: true,
+    allowNull: false
   }
 },
 {

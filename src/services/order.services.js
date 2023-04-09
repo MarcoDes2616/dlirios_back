@@ -19,9 +19,10 @@ class OrderServices {
     }
 
     static async getOrderByUser(user_id) {
+        const filter = user_id ? {where: user_id} : {}
         try {
             return await Order.findAll({
-                where: {user_id},
+                filter,
                 attributes: {
                     exclude: ["user_id"]
                 },
