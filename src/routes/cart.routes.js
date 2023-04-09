@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { addToCart, getCart, updateCart, deleteProduct } = require("../controllers/cart.controllers");
+const { addToCart, getCart, updateCart } = require("../controllers/cart.controllers");
 const authenticate = require("../middlewares/auth.middleware");
 const { addToCartValidator } = require("../validators/cart.validators");
 const { update } = require("../services/products.services");
@@ -19,8 +19,5 @@ router.get("/api/v1/cart",
     authenticate, 
     getCart)
 
-router.delete("/api/v1/cart/:product_id",
-    authenticate,
-    deleteProduct)
 
 module.exports = router;

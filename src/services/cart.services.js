@@ -91,12 +91,5 @@ class CartServices {
         }
     }
 
-    static async deleteProductInCart(product_id, cart_id) {
-        try {
-            return await ProductInCart.destroy({ where: [{product_id}, {cart_id}]})
-        } catch (error) {
-            throw error
-        }
-    }
 }
 module.exports = CartServices;

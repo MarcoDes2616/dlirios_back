@@ -135,6 +135,13 @@ const updateCart = async (req, res, next) => {
             });
         }
         const newQ = currentQuantity + quantity
+        if (newQ < 0) {
+            return next({
+                status: 406,
+                message: "Not acceptable",
+                errorName: "stock no disponible",
+            });
+        }
         await CartServices.updateCart(cart_id, { total: total + (price * quantity) })
         await CartServices.updateProductInCart(picId, {
             quantity: newQ,
@@ -148,33 +155,9 @@ const updateCart = async (req, res, next) => {
     }
 }
 
-const deleteProduct = async (req, res, next) => {
-    try {
-        const { product_id } = req.params;
-        const { id } = req.user
-        const { id: cart_id } = await CartServices.getByUser(id)
-        await CartServices.deleteProductInCart(product_id, cart_id)
-        
-        let totalTemp = 0
-        const cart = await CartServices.getCartByUser(id)
-        cart.product_in_carts?.forEach(async ({sub_total}) => {
-            console.log(sub_total);
-            totalTemp = totalTemp + sub_total
-            await CartServices.updateCart(cart.id, {total: totalTemp})
-        });
-    
-        res.json({
-        success: true,
-        cart
-    })
-} catch (error) {
-    next(error)
-}
-}
 
 module.exports = {
     addToCart,
     getCart,
     updateCart,
-    deleteProduct
 }
