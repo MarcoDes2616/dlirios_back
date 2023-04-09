@@ -1,6 +1,7 @@
 const Cart = require("../models/cart.models");
 const ProductInCart = require("../models/productInCart.models");
 const Products = require("../models/products.models");
+const { Op } = require("sequelize");
 
 class CartServices {
     static async add(data) {
@@ -13,7 +14,7 @@ class CartServices {
 
     static async getByUser(user_id) {
         try {
-            return await Cart.findOne({ where: {user_id}})
+            return await Cart.findOne({ where: {user_id} })
         } catch (error) {
             throw error;
         }
@@ -65,6 +66,7 @@ class CartServices {
                 },
                 include: {
                     model: ProductInCart,
+                    where: { quantity: { [Op.gt]: 0 }},
                     attributes: {
                         exclude: ["cart_id", "id"]
                     },
@@ -86,6 +88,14 @@ class CartServices {
             })
         } catch (error) {
             throw error;
+        }
+    }
+
+    static async deleteProductInCart(product_id, cart_id) {
+        try {
+            return await ProductInCart.destroy({ where: [{product_id}, {cart_id}]})
+        } catch (error) {
+            throw error
         }
     }
 }

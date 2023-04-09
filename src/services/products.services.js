@@ -1,19 +1,20 @@
 const Products = require("../models/products.models");
 const { Op } = require("sequelize");
-const Users = require("../models/users.models");
+const Categories = require("../models/category.models");
 
 class ProductsServices {
   static async getAll(category) {
     try {
-      return await Products.findAndCountAll({
-        where: [{ stock: { [Op.gt]: 0 }}, 
-          {category_id: category}
-          ],
-        attributes: {
-          exclude: ["category_id"]
-        }
-      });
-
+      const options = category ? 
+        {where: [{ stock: { [Op.gt]: 0 }}, 
+                {category_id: category}],
+        attributes: {exclude: ["category_id"]},
+        include: Categories } : 
+        {where: { stock: { [Op.gt]: 0 }}, 
+        attributes: {exclude: ["category_id"]},  
+        include: Categories}
+      
+      return await Products.findAndCountAll(options);
     } catch (error) {
       throw error;
     }

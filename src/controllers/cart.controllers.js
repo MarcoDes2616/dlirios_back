@@ -2,7 +2,6 @@ const CartServices = require("../services/cart.services");
 const ProductsServices = require("../services/products.services");
 
 
-
 const addToCart = async (req, res, next) => {
     try {
         const { id: user_id } = req.user
@@ -55,7 +54,7 @@ const addToCart = async (req, res, next) => {
             });
         }
 
-        const { id : cart_id, total } = cart;
+        const { id: cart_id, total } = cart;
         // si cart existe entonces buscamos el producto
         const findProduct = await CartServices.getProductInCart(cart_id, product_id)
 
@@ -120,7 +119,62 @@ const getCart = async (req, res, next) => {
     }
 }
 
+const updateCart = async (req, res, next) => {
+    try {
+        const { id } = req.user
+        const { product_id, quantity } = req.body;
+        const { stock, price } = await ProductsServices.getOne(product_id);
+        const { id: cart_id, total } = await CartServices.getByUser(id)
+        const { quantity: currentQuantity, id: picId } = await CartServices.getProductInCart(cart_id, product_id)
+
+        if (stock < currentQuantity + quantity) {
+            return next({
+                status: 406,
+                message: "Not acceptable",
+                errorName: "stock no disponible",
+            });
+        }
+        const newQ = currentQuantity + quantity
+        await CartServices.updateCart(cart_id, { total: total + (price * quantity) })
+        await CartServices.updateProductInCart(picId, {
+            quantity: newQ,
+            sub_total: newQ * price
+        })
+        res.json({
+            success: true
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteProduct = async (req, res, next) => {
+    try {
+        const { product_id } = req.params;
+        const { id } = req.user
+        const { id: cart_id } = await CartServices.getByUser(id)
+        await CartServices.deleteProductInCart(product_id, cart_id)
+        
+        let totalTemp = 0
+        const cart = await CartServices.getCartByUser(id)
+        cart.product_in_carts?.forEach(async ({sub_total}) => {
+            console.log(sub_total);
+            totalTemp = totalTemp + sub_total
+            await CartServices.updateCart(cart.id, {total: totalTemp})
+        });
+    
+        res.json({
+        success: true,
+        cart
+    })
+} catch (error) {
+    next(error)
+}
+}
+
 module.exports = {
     addToCart,
-    getCart
+    getCart,
+    updateCart,
+    deleteProduct
 }
