@@ -26,6 +26,9 @@ const UserData = db.define('user_datas', {
     type: DataTypes.TEXT,
     unique: true
   }
+},
+{
+  timestamps: false
 });
 
 module.exports = UserData;

@@ -24,19 +24,16 @@ const Products = db.define('products', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
   product_image: {
     type: DataTypes.TEXT,
-    allowNull: true,
     unique: true
   },
   category_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   }
+},{
+  timestamps: false
 });
 
 module.exports = Products;

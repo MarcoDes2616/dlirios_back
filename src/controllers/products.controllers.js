@@ -3,33 +3,10 @@ const ProductsServices = require("../services/products.services");
 
 
 const getAllProducts = async (req, res, next) => {
-  
-  const url = "localhost:8000/api/v1/products";
-
   try {
-    const { offset, limit } = req.query;
-    const posts = await ProductsServices.getAll( offset, limit);
-    const { count, rows } = posts;
-
-
-    const newOffset = (isNext) => {
-      if (isNext) return Number(offset) + Number(limit);
-      return Number(offset) - Number(limit);
-    };
-
-    const nextPage = newOffset(true) >= count ? null : `${url}?offset=${newOffset(true)}&limit=${limit}`;
-
-    const previousPage = Number(offset) > 0 ? `${url}?offset=${newOffset(false)}&limit=${limit}` : null;
-
-    const response = {
-      count,
-      next: nextPage,
-      previous: previousPage,
-      posts: rows,
-    };
-
-    res.json(!limit && !offset ? response.posts : response);
-
+    const { category } = req.query;
+    const result = await ProductsServices.getAll(category);
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -37,24 +14,17 @@ const getAllProducts = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
   try {
-    const {id} = req.params;
-    const {name, description, price, stock, user_id} = req.body
-    // if (id != user_id) {
-    //   return next({
-    //     status: 401,
-    //     message: "Unauthorized, user not logged in",
-    //     errorName: "user not logged in",
-    //   });
-    // }
+    const {name, description, price, stock, category_id} = req.body
+   
     const newData = {
-      name, 
+      name,
       description, 
       price: +price, 
-      stock: +stock, 
-      user_id: id,
-      // product_image: req.file?.path
+      stock: +stock,
+      product_image: req.file?.path,
+      category_id: +category_id
     }
-    await ProductsServices.create(req.body);
+    await ProductsServices.create(newData);
     res.status(201).json({
       success: true
     });

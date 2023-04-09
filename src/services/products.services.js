@@ -3,15 +3,14 @@ const { Op } = require("sequelize");
 const Users = require("../models/users.models");
 
 class ProductsServices {
-  static async getAll(offset, limit) {
+  static async getAll(category) {
     try {
       return await Products.findAndCountAll({
-        where: { stock: { [Op.gt]: 0 }},
-        offset,
-        limit,
-        include: {
-          model: Users,
-          attributes: ["username", "avatar"]
+        where: [{ stock: { [Op.gt]: 0 }}, 
+          {category_id: category}
+          ],
+        attributes: {
+          exclude: ["category_id"]
         }
       });
 

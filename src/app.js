@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth.routes");
 const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const productsRoutes = require("./routes/products.routes");
+const categoryRoutes = require("./routes/category.routes");
 const initModels = require("./models/initModels");
 const errorHandlerRouter = require("./routes/errorHandler.routes");
 const db = require("./utils/database");
@@ -38,6 +39,7 @@ app.use(authRoutes);
 app.use(cartRoutes);
 app.use(productsRoutes);
 app.use(orderRoutes);
+app.use(categoryRoutes);
 
 
 app.get("/", (req, res) => {

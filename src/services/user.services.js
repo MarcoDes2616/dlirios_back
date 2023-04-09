@@ -1,22 +1,19 @@
+const UserData = require("../models/userData.models");
 const Users = require("../models/users.models");
 
 class UsersServices {
   
   static async create(newUser) {
     try {
-      console.log("llegue aqui");
       return await Users.create(newUser);
     } catch (error) {
-      console.log(" y luego llegue aqui");
       throw error;
     }
   }
 
-  static async update(id, data) {
+  static async update(data) {
     try {
-      return await Users.update(data, {
-        where: { id },
-      });
+      return await UserData.create(data);
 
     } catch (error) {
       throw error;
