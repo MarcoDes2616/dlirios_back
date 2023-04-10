@@ -27,7 +27,7 @@ function cancelOrdersJob() {
     setTimeout(() => {
       orders.filter(order => !order.is_completed).forEach(async (order) => {
         // Calcule la fecha límite para el pago
-        // const created = new Date(order.createdAt).getTime()
+        const created = new Date(order.createdAt).getTime()
         const warningline = new Date(order.createdAt.setHours(order.createdAt.getHours() + 36)).getTime();
         const deadline = new Date(order.createdAt.setHours(order.createdAt.getHours() + 12)).getTime();
         const now = Date.now();
@@ -39,11 +39,11 @@ function cancelOrdersJob() {
         })
 
         if (now > warningline && !exist) {
-          warn(order)
+          warn(order, created)
         }
         
         if (now > deadline) {
-          orderCancel(order)
+          orderCancel(order, created)
         }
       }); // cierre filter
     }, 500)
@@ -55,7 +55,7 @@ module.exports = cancelOrdersJob
 
 
 
-const warn = async (order) => {
+const warn = async (order, created) => {
   try {
     await Warning.create({ order_id: order.id })
     const user = await Users.findByPk(order.user_id)
@@ -64,7 +64,7 @@ const warn = async (order) => {
         from: process.env.MAILER_CONFIG_USER,
         to: user.email,
         subject: "Orden en riesgo de Cancelación",
-        html: mailWarning(user, order),
+        html: mailWarning(user, order, created),
       });
     }
   } catch (error) {
@@ -72,7 +72,7 @@ const warn = async (order) => {
   }
 }
 
-const orderCancel = async (order) => {
+const orderCancel = async (order, created) => {
   try {
     await OrderDeads.create({ order_id: order.id, user_id: order.user_id, total: order.total })
     order.product_in_orders.forEach(async ({product_id, order_id, quantity, sub_total}) => {
@@ -83,7 +83,7 @@ const orderCancel = async (order) => {
           from: process.env.MAILER_CONFIG_USER,
           to: user.email,
           subject: "Orden ha sido cancelada",
-          html: mailCancel(user, order),
+          html: mailCancel(user, order, created),
         });
       }
       await Order.destroy({ where: { id: order.id } })
