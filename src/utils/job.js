@@ -83,7 +83,7 @@ const orderCancel = async (order, created) => {
           from: process.env.MAILER_CONFIG_USER,
           to: user.email,
           subject: "Orden ha sido cancelada",
-          html: mailCancel(user, order, created),
+          html: mailCancel(user, created),
         });
       }
       await Order.destroy({ where: { id: order.id } })
