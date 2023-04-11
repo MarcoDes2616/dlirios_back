@@ -27,7 +27,7 @@ function cancelOrdersJob() {
     setTimeout(() => {
       orders.filter(order => !order.is_completed).forEach(async (order) => {
         // Calcule la fecha límite para el pago
-        const created = new Date(order.createdAt).getTime()
+        const created = order.createdAt
         const warningline = new Date(order.createdAt.setHours(order.createdAt.getHours() + 36)).getTime();
         const deadline = new Date(order.createdAt.setHours(order.createdAt.getHours() + 12)).getTime();
         const now = Date.now();
