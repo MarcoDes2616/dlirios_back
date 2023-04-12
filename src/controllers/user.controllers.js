@@ -19,12 +19,9 @@ const createUser = async (req, res, next) => {
         html: mailWelcome(user.username),
       });
     }
-    const {id, username, email} = user
-    const token = AuthServices.genToken({ id, username, email });
 
     res.status(201).json({
-      success: true,
-      id, username, email, token 
+      success: true
     });
 
   } catch (error) {
