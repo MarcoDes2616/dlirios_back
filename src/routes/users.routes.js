@@ -18,6 +18,7 @@ router.post("/api/v1/users/:id",
     multerUpload.single('file'),
     createData);
 
+//obtener data de usuario
 router.get("/api/v1/users",
     authenticate,
     getDataUser
