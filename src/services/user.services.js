@@ -25,6 +25,12 @@ class UsersServices {
     try {
       const user = await Users.findOne({
         where: { email },
+        include: {
+          model: UserData,
+          include: {
+            exclude: ["user_id"]
+          }
+        }
       });
       return user;
     } catch (error) {

@@ -59,7 +59,30 @@ const createData = async (req, res, next) => {
   }
 };
 
+const getDataUser = async (req, res, next) => {
+  try {
+    const {email: emailToken} = req.user;
+    const data = await UsersServices.getUser(emailToken);
+    if (!data) {
+      return next({
+        status: 400,
+        message: "Invalid email",
+        errorName: "User not found",
+      });
+    }
+
+    const {id, username, email} = data
+
+    const token = AuthServices.genToken({ id, email, username });
+    data.token = token
+    res.status(201).json(data);
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   createUser,
   createData,
+  getDataUser
 };

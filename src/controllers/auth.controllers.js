@@ -1,4 +1,4 @@
-const UserServices = require("../services/user.services");
+const UsersServices = require("../services/user.services");
 const AuthServices = require("../services/auth.services");
 const bcrypt = require("bcrypt");
 
@@ -6,8 +6,8 @@ const userLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await UserServices.getUser(email);
-    if (!user) {
+    const data = await UsersServices.getUser(email);
+    if (!data) {
       return next({
         status: 400,
         message: "Invalid email",
@@ -24,16 +24,9 @@ const userLogin = async (req, res, next) => {
       });
     }
 
-    const { id, username, avatar } = user;
-
     const token = AuthServices.genToken({ id, username, email });
-    res.json({
-      id,
-      username,
-      email,
-      token,
-      avatar
-    });
+    data.token = token
+    res.json(data);
   } catch (error) {
     next(error);
   }

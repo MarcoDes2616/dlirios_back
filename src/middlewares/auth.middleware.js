@@ -13,6 +13,13 @@ const authenticate = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_CONFIG_SECRET, { algorithms: process.env.JWT_CONFIG_ALGORITHM })
+    if (!decoded) {
+      return next({
+        status: 401,
+        error: "Unauthorized",
+        message: "Not token provided",
+      });
+    }
     req.user = decoded;
     next();
   } catch (error) {
