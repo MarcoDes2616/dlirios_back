@@ -19,9 +19,9 @@ router.post("/api/v1/users/:id",
     createData);
 
 //obtener data de usuario por token
-// router.get("/api/v1/users",
-//     authenticate,
-//     getDataUser);
+router.get("/api/v1/users/",
+    authenticate,
+    getDataUser);
 
 //activar/desactivar un usuario
 router.put("/api/v1/user/:id", authenticate, rolAuth, async (req, res, next) => {

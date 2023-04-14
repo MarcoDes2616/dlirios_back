@@ -1,4 +1,4 @@
-// const UserData = require("../models/userData.models");
+const UserData = require("../models/userData.models");
 const Users = require("../models/users.models");
 
 class UsersServices {
@@ -23,9 +23,16 @@ class UsersServices {
   
   static async getUser(email) {
     try {
-      return await Users.findOne({
-        where: { email }
+      const user = await Users.findOne({
+        where: { email },
+        include: {
+          model: UserData,
+          include: {
+            exclude: ["user_id"]
+          }
+        }
       });
+      return user;
     } catch (error) {
       throw error;
     }
