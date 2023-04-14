@@ -25,6 +25,16 @@ class UsersServices {
     try {
       const user = await Users.findOne({
         where: { email },
+        attributes: {
+          exclude: ["is_admin"]
+        },
+        include: {
+          model: UserData,
+          attributes: {
+            exclude: ["id", "user_id"]
+          }
+        }
+
       });
       return user;
     } catch (error) {

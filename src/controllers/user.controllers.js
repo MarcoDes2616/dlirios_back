@@ -59,7 +59,31 @@ const createData = async (req, res, next) => {
   }
 };
 
+const getDataUser = async (req, res, next) => {
+  try {
+    const {email} = req.user;
+    const data = await UsersServices.getUser(email)
+    const { id, username, data_completed, enable, user_data } = data;
+    
+    if (!enable) {
+      return next({
+        status: 401,
+        message: "User diseable",
+        errorName: "User diseable",
+      });
+    }
+    
+    const token = AuthServices.genToken({ id, username, email });
+
+    res.json({token, id, username, email, data_completed, user_data});
+
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   createUser,
   createData,
+  getDataUser
 };

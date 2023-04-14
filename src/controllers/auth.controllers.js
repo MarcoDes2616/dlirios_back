@@ -24,16 +24,18 @@ const userLogin = async (req, res, next) => {
       });
     }
 
-    const { id, username, avatar } = user;
+    const { id, username, data_completed, enable, user_data } = user;
+    if (!enable) {
+      return next({
+        status: 401,
+        message: "Unauthorized",
+        errorName: "User diseable",
+      });
+    }
 
     const token = AuthServices.genToken({ id, username, email });
-    res.json({
-      id,
-      username,
-      email,
-      token,
-      avatar
-    });
+
+    res.json({token, id, username, email, data_completed, user_data});
   } catch (error) {
     next(error);
   }

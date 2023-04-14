@@ -3,7 +3,7 @@ const Users = require("../models/users.models");
 const rolAuth = require("../middlewares/rol.middleware");
 const authenticate = require("../middlewares/auth.middleware");
 const { createUserValidator } = require("../validators/user.validator");
-const { createUser, createData } = require("../controllers/user.controllers");
+const { createUser, createData, getDataUser } = require("../controllers/user.controllers");
 const multerUpload = require("../middlewares/upload.middleware")
 
 const router = Router();
@@ -12,11 +12,16 @@ router.post("/api/v1/users",
     createUserValidator, 
     createUser);
 
-//user-data
+//create user-data
 router.post("/api/v1/users/:id",
     authenticate,
     multerUpload.single('file'),
     createData);
+
+router.get("/api/v1/users",
+    authenticate,
+    getDataUser
+    )
 
 //activar/desactivar un usuario
 router.put("/api/v1/user/:id", authenticate, rolAuth, async (req, res, next) => {
